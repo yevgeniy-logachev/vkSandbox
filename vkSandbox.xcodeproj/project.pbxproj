@@ -1,0 +1,565 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CC26A1811DDA4F6D0050A9FB /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC26A1801DDA4F6D0050A9FB /* Metal.framework */; };
+		CC26A1831DDA4F6D0050A9FB /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC26A1821DDA4F6D0050A9FB /* MetalKit.framework */; };
+		CC26A1851DDA4F6D0050A9FB /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC26A1841DDA4F6D0050A9FB /* ModelIO.framework */; };
+		CC26A1891DDA4F6D0050A9FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC26A1881DDA4F6D0050A9FB /* main.m */; };
+		CC26A18C1DDA4F6D0050A9FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC26A18B1DDA4F6D0050A9FB /* AppDelegate.m */; };
+		CC26A18F1DDA4F6D0050A9FB /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC26A18E1DDA4F6D0050A9FB /* GameViewController.m */; };
+		CC26A1911DDA4F6D0050A9FB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = CC26A1901DDA4F6D0050A9FB /* Shaders.metal */; };
+		CC26A1951DDA4F6D0050A9FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC26A1931DDA4F6D0050A9FB /* Main.storyboard */; };
+		CC26A1971DDA4F6D0050A9FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC26A1961DDA4F6D0050A9FB /* Assets.xcassets */; };
+		CC26A19A1DDA4F6D0050A9FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC26A1981DDA4F6D0050A9FB /* LaunchScreen.storyboard */; };
+		CC26A1A51DDA4F6D0050A9FB /* vkSandboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC26A1A41DDA4F6D0050A9FB /* vkSandboxTests.m */; };
+		CC26A1B01DDA4F6D0050A9FB /* vkSandboxUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC26A1AF1DDA4F6D0050A9FB /* vkSandboxUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CC26A1A11DDA4F6D0050A9FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC26A1751DDA4F6D0050A9FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CC26A17C1DDA4F6D0050A9FB;
+			remoteInfo = vkSandbox;
+		};
+		CC26A1AC1DDA4F6D0050A9FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC26A1751DDA4F6D0050A9FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CC26A17C1DDA4F6D0050A9FB;
+			remoteInfo = vkSandbox;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CC26A17D1DDA4F6D0050A9FB /* vkSandbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vkSandbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC26A1801DDA4F6D0050A9FB /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		CC26A1821DDA4F6D0050A9FB /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		CC26A1841DDA4F6D0050A9FB /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
+		CC26A1881DDA4F6D0050A9FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CC26A18A1DDA4F6D0050A9FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		CC26A18B1DDA4F6D0050A9FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		CC26A18D1DDA4F6D0050A9FB /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		CC26A18E1DDA4F6D0050A9FB /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		CC26A1901DDA4F6D0050A9FB /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		CC26A1921DDA4F6D0050A9FB /* SharedStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedStructures.h; sourceTree = "<group>"; };
+		CC26A1941DDA4F6D0050A9FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CC26A1961DDA4F6D0050A9FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC26A1991DDA4F6D0050A9FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CC26A19B1DDA4F6D0050A9FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC26A1A01DDA4F6D0050A9FB /* vkSandboxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vkSandboxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC26A1A41DDA4F6D0050A9FB /* vkSandboxTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = vkSandboxTests.m; sourceTree = "<group>"; };
+		CC26A1A61DDA4F6D0050A9FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC26A1AB1DDA4F6D0050A9FB /* vkSandboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vkSandboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC26A1AF1DDA4F6D0050A9FB /* vkSandboxUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = vkSandboxUITests.m; sourceTree = "<group>"; };
+		CC26A1B11DDA4F6D0050A9FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CC26A17A1DDA4F6D0050A9FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC26A1851DDA4F6D0050A9FB /* ModelIO.framework in Frameworks */,
+				CC26A1811DDA4F6D0050A9FB /* Metal.framework in Frameworks */,
+				CC26A1831DDA4F6D0050A9FB /* MetalKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A19D1DDA4F6D0050A9FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A1A81DDA4F6D0050A9FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CC26A1741DDA4F6D0050A9FB = {
+			isa = PBXGroup;
+			children = (
+				CC26A1861DDA4F6D0050A9FB /* vkSandbox */,
+				CC26A1A31DDA4F6D0050A9FB /* vkSandboxTests */,
+				CC26A1AE1DDA4F6D0050A9FB /* vkSandboxUITests */,
+				CC26A17F1DDA4F6D0050A9FB /* Frameworks */,
+				CC26A17E1DDA4F6D0050A9FB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CC26A17E1DDA4F6D0050A9FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A17D1DDA4F6D0050A9FB /* vkSandbox.app */,
+				CC26A1A01DDA4F6D0050A9FB /* vkSandboxTests.xctest */,
+				CC26A1AB1DDA4F6D0050A9FB /* vkSandboxUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CC26A17F1DDA4F6D0050A9FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A1801DDA4F6D0050A9FB /* Metal.framework */,
+				CC26A1821DDA4F6D0050A9FB /* MetalKit.framework */,
+				CC26A1841DDA4F6D0050A9FB /* ModelIO.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CC26A1861DDA4F6D0050A9FB /* vkSandbox */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A18A1DDA4F6D0050A9FB /* AppDelegate.h */,
+				CC26A18B1DDA4F6D0050A9FB /* AppDelegate.m */,
+				CC26A18D1DDA4F6D0050A9FB /* GameViewController.h */,
+				CC26A18E1DDA4F6D0050A9FB /* GameViewController.m */,
+				CC26A1901DDA4F6D0050A9FB /* Shaders.metal */,
+				CC26A1921DDA4F6D0050A9FB /* SharedStructures.h */,
+				CC26A1931DDA4F6D0050A9FB /* Main.storyboard */,
+				CC26A1961DDA4F6D0050A9FB /* Assets.xcassets */,
+				CC26A1981DDA4F6D0050A9FB /* LaunchScreen.storyboard */,
+				CC26A19B1DDA4F6D0050A9FB /* Info.plist */,
+				CC26A1871DDA4F6D0050A9FB /* Supporting Files */,
+			);
+			path = vkSandbox;
+			sourceTree = "<group>";
+		};
+		CC26A1871DDA4F6D0050A9FB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A1881DDA4F6D0050A9FB /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CC26A1A31DDA4F6D0050A9FB /* vkSandboxTests */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A1A41DDA4F6D0050A9FB /* vkSandboxTests.m */,
+				CC26A1A61DDA4F6D0050A9FB /* Info.plist */,
+			);
+			path = vkSandboxTests;
+			sourceTree = "<group>";
+		};
+		CC26A1AE1DDA4F6D0050A9FB /* vkSandboxUITests */ = {
+			isa = PBXGroup;
+			children = (
+				CC26A1AF1DDA4F6D0050A9FB /* vkSandboxUITests.m */,
+				CC26A1B11DDA4F6D0050A9FB /* Info.plist */,
+			);
+			path = vkSandboxUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CC26A17C1DDA4F6D0050A9FB /* vkSandbox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC26A1B41DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandbox" */;
+			buildPhases = (
+				CC26A1791DDA4F6D0050A9FB /* Sources */,
+				CC26A17A1DDA4F6D0050A9FB /* Frameworks */,
+				CC26A17B1DDA4F6D0050A9FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vkSandbox;
+			productName = vkSandbox;
+			productReference = CC26A17D1DDA4F6D0050A9FB /* vkSandbox.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CC26A19F1DDA4F6D0050A9FB /* vkSandboxTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC26A1B71DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandboxTests" */;
+			buildPhases = (
+				CC26A19C1DDA4F6D0050A9FB /* Sources */,
+				CC26A19D1DDA4F6D0050A9FB /* Frameworks */,
+				CC26A19E1DDA4F6D0050A9FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CC26A1A21DDA4F6D0050A9FB /* PBXTargetDependency */,
+			);
+			name = vkSandboxTests;
+			productName = vkSandboxTests;
+			productReference = CC26A1A01DDA4F6D0050A9FB /* vkSandboxTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CC26A1AA1DDA4F6D0050A9FB /* vkSandboxUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC26A1BA1DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandboxUITests" */;
+			buildPhases = (
+				CC26A1A71DDA4F6D0050A9FB /* Sources */,
+				CC26A1A81DDA4F6D0050A9FB /* Frameworks */,
+				CC26A1A91DDA4F6D0050A9FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CC26A1AD1DDA4F6D0050A9FB /* PBXTargetDependency */,
+			);
+			name = vkSandboxUITests;
+			productName = vkSandboxUITests;
+			productReference = CC26A1AB1DDA4F6D0050A9FB /* vkSandboxUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CC26A1751DDA4F6D0050A9FB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = "Yevgeniy Logachev";
+				TargetAttributes = {
+					CC26A17C1DDA4F6D0050A9FB = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = FK6P3M845J;
+						ProvisioningStyle = Automatic;
+					};
+					CC26A19F1DDA4F6D0050A9FB = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = FK6P3M845J;
+						ProvisioningStyle = Automatic;
+						TestTargetID = CC26A17C1DDA4F6D0050A9FB;
+					};
+					CC26A1AA1DDA4F6D0050A9FB = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = FK6P3M845J;
+						ProvisioningStyle = Automatic;
+						TestTargetID = CC26A17C1DDA4F6D0050A9FB;
+					};
+				};
+			};
+			buildConfigurationList = CC26A1781DDA4F6D0050A9FB /* Build configuration list for PBXProject "vkSandbox" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CC26A1741DDA4F6D0050A9FB;
+			productRefGroup = CC26A17E1DDA4F6D0050A9FB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CC26A17C1DDA4F6D0050A9FB /* vkSandbox */,
+				CC26A19F1DDA4F6D0050A9FB /* vkSandboxTests */,
+				CC26A1AA1DDA4F6D0050A9FB /* vkSandboxUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CC26A17B1DDA4F6D0050A9FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC26A19A1DDA4F6D0050A9FB /* LaunchScreen.storyboard in Resources */,
+				CC26A1971DDA4F6D0050A9FB /* Assets.xcassets in Resources */,
+				CC26A1951DDA4F6D0050A9FB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A19E1DDA4F6D0050A9FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A1A91DDA4F6D0050A9FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CC26A1791DDA4F6D0050A9FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC26A1911DDA4F6D0050A9FB /* Shaders.metal in Sources */,
+				CC26A18C1DDA4F6D0050A9FB /* AppDelegate.m in Sources */,
+				CC26A18F1DDA4F6D0050A9FB /* GameViewController.m in Sources */,
+				CC26A1891DDA4F6D0050A9FB /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A19C1DDA4F6D0050A9FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC26A1A51DDA4F6D0050A9FB /* vkSandboxTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC26A1A71DDA4F6D0050A9FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC26A1B01DDA4F6D0050A9FB /* vkSandboxUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CC26A1A21DDA4F6D0050A9FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CC26A17C1DDA4F6D0050A9FB /* vkSandbox */;
+			targetProxy = CC26A1A11DDA4F6D0050A9FB /* PBXContainerItemProxy */;
+		};
+		CC26A1AD1DDA4F6D0050A9FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CC26A17C1DDA4F6D0050A9FB /* vkSandbox */;
+			targetProxy = CC26A1AC1DDA4F6D0050A9FB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CC26A1931DDA4F6D0050A9FB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC26A1941DDA4F6D0050A9FB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		CC26A1981DDA4F6D0050A9FB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CC26A1991DDA4F6D0050A9FB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CC26A1B21DDA4F6D0050A9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CC26A1B31DDA4F6D0050A9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CC26A1B51DDA4F6D0050A9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandbox/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandbox;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CC26A1B61DDA4F6D0050A9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandbox/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandbox;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CC26A1B81DDA4F6D0050A9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandboxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandboxTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vkSandbox.app/vkSandbox";
+			};
+			name = Debug;
+		};
+		CC26A1B91DDA4F6D0050A9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandboxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandboxTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vkSandbox.app/vkSandbox";
+			};
+			name = Release;
+		};
+		CC26A1BB1DDA4F6D0050A9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandboxUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandboxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = vkSandbox;
+			};
+			name = Debug;
+		};
+		CC26A1BC1DDA4F6D0050A9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = FK6P3M845J;
+				INFOPLIST_FILE = vkSandboxUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dreamdev.vkSandboxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = vkSandbox;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CC26A1781DDA4F6D0050A9FB /* Build configuration list for PBXProject "vkSandbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC26A1B21DDA4F6D0050A9FB /* Debug */,
+				CC26A1B31DDA4F6D0050A9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC26A1B41DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC26A1B51DDA4F6D0050A9FB /* Debug */,
+				CC26A1B61DDA4F6D0050A9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CC26A1B71DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandboxTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC26A1B81DDA4F6D0050A9FB /* Debug */,
+				CC26A1B91DDA4F6D0050A9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CC26A1BA1DDA4F6D0050A9FB /* Build configuration list for PBXNativeTarget "vkSandboxUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC26A1BB1DDA4F6D0050A9FB /* Debug */,
+				CC26A1BC1DDA4F6D0050A9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CC26A1751DDA4F6D0050A9FB /* Project object */;
+}
