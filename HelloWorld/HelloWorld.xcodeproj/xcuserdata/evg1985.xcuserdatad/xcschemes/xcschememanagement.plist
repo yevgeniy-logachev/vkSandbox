@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>vkSandbox.xcscheme</key>
+		<key>HelloWorld.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,17 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>CC26A17C1DDA4F6D0050A9FB</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CC26A19F1DDA4F6D0050A9FB</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CC26A1AA1DDA4F6D0050A9FB</key>
+		<key>6E82D4141E27E03A008DC962</key>
 		<dict>
 			<key>primary</key>
 			<true/>

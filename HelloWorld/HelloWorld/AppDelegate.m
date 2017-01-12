@@ -1,9 +1,9 @@
 //
 //  AppDelegate.m
-//  vkSandbox
+//  HelloWorld
 //
-//  Created by Yevgeniy Logachev on 11/14/16.
-//  Copyright © 2016 Yevgeniy Logachev. All rights reserved.
+//  Created by Yevgeniy Logachev on 1/12/17.
+//  Copyright © 2017 Yevgeniy Logachev. All rights reserved.
 //
 
 #import "AppDelegate.h"

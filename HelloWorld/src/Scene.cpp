@@ -6,12 +6,13 @@
 //  Copyright © 2016 Yevgeniy Logachev. All rights reserved.
 //
 
-#include "scene.hpp"
+#include "Scene.hpp"
 #include <assert.h>
 #include <MoltenVK/vk_mvk_ios_surface.h>
+#include <string>
 
 Scene::Scene()
-: m_IsInitialized(false)
+    : m_IsInitialized(false)
 {
 }
 
@@ -19,14 +20,229 @@ Scene::~Scene()
 {
 }
 
-VkResult Scene::Initialize(void* view)
+bool Scene::Initialize(void* view)
+{
+    VkResult result;
+    // Instance
+    {
+        std::tuple<VkResult, VkInstance> instanceData = CreateInstance("Hello World", "VkEngine");
+        result = std::get<0>(instanceData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulkan instance\n");
+            return false;
+        }
+        m_Instance = std::get<1>(instanceData);
+    }
+
+    // GPU
+    {
+        std::tuple<VkResult, std::vector<VkPhysicalDevice> > physicalDeviceData = GetPhysicalDevices(m_Instance);
+        result = std::get<0>(physicalDeviceData);
+        if (result != VK_SUCCESS) {
+            printf("Can't retrieve Vulkan compatible GPU list\n");
+            return false;
+        }
+        m_PhysicalDevices = std::get<1>(physicalDeviceData);
+    }
+    const VkPhysicalDevice& currentPhysicalDevice = m_PhysicalDevices[0];
+
+    // GPU Queue Props
+    {
+        m_QueueProperties = GetPhysicalDeviceQueueProps(m_Instance, currentPhysicalDevice);
+    }
+
+    // Surface
+    {
+        std::tuple<VkResult, VkSurfaceKHR, std::vector<VkSurfaceFormatKHR> > surfaceData = CreateSurface(m_Instance,
+            currentPhysicalDevice,
+            view);
+        result = std::get<0>(surfaceData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn surface\n");
+            return false;
+        }
+        m_Surface = std::get<1>(surfaceData);
+        m_SurfaceFormats = std::get<2>(surfaceData);
+    }
+    VkSurfaceFormatKHR currentSurfaceFormat = m_SurfaceFormats[0];
+
+    // Logical device
+    {
+        std::tuple<VkResult, VkDevice> logicalDeviceData = CreateLogicalDevice(currentPhysicalDevice);
+        result = std::get<0>(logicalDeviceData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn logical device\n");
+            return false;
+        }
+        m_LogicalDevice = std::get<1>(logicalDeviceData);
+    }
+
+    // Swapchain buffers
+    {
+        std::tuple<VkResult, VkSwapchainKHR, std::vector<SwapchainBuffers> > buffers = CreateBuffers(currentPhysicalDevice,
+            m_LogicalDevice, m_Surface, currentSurfaceFormat);
+        result = std::get<0>(buffers);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn swapchain buffers\n");
+            return false;
+        }
+        m_Swapchain = std::get<1>(buffers);
+        m_SwapchainBuffers = std::get<2>(buffers);
+    }
+
+    // Render Pass
+    {
+        std::tuple<VkResult, VkRenderPass> renderPassData = CreateRenderPass(m_LogicalDevice, currentSurfaceFormat);
+        result = std::get<0>(renderPassData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn render pass\n");
+            return false;
+        }
+        m_RenderPass = std::get<1>(renderPassData);
+    }
+
+    // Framebuffers
+    {
+        std::tuple<VkResult, std::vector<VkFramebuffer> > frameBufferData = CreateFrameBuffers(m_LogicalDevice,
+            m_SwapchainBuffers,
+            m_RenderPass);
+        result = std::get<0>(frameBufferData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn framebuffers\n");
+            return false;
+        }
+        m_FrameBuffers = std::get<1>(frameBufferData);
+    }
+
+    // Command buffers
+    {
+        std::vector<VkBool32> supportsPresent(m_QueueProperties.size());
+        for (int i = 0; i < m_QueueProperties.size(); i++) {
+            vkGetPhysicalDeviceSurfaceSupportKHR(currentPhysicalDevice, i, m_Surface, &supportsPresent[i]);
+        }
+
+        std::tuple<bool, VkQueueFamilyProperties, uint32_t> graphicQueuePropsData = FindQueueProperties(VK_QUEUE_GRAPHICS_BIT,
+            supportsPresent);
+        bool found = std::get<0>(graphicQueuePropsData);
+        if (!found) {
+            printf("Can't find Vulksn graphics queue\n");
+            return false;
+        }
+        uint32_t graphicQueuePropsIndex = std::get<2>(graphicQueuePropsData);
+
+        vkGetDeviceQueue(m_LogicalDevice, graphicQueuePropsIndex, 0, &m_Queue);
+        std::tuple<VkResult, VkCommandPool, std::vector<VkCommandBuffer> > cmdPoolData = CreateCommandPool(m_LogicalDevice,
+            graphicQueuePropsIndex,
+            m_SwapchainBuffers.size());
+        result = std::get<0>(cmdPoolData);
+        if (result != VK_SUCCESS) {
+            printf("Can't create Vulksn command buffer\n");
+            return false;
+        }
+        m_CommandPool = std::get<1>(cmdPoolData);
+        m_CommandBuffers = std::get<2>(cmdPoolData);
+    }
+
+    // Fill command buffer
+    for (uint32_t i = 0; i < m_SwapchainBuffers.size(); ++i) {
+
+        VkCommandBufferInheritanceInfo commandBufferInheritanceInfo = {
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
+            .pNext = nullptr,
+            .renderPass = m_RenderPass,
+            .subpass = 0,
+            .framebuffer = m_FrameBuffers[i],
+            .occlusionQueryEnable = VK_FALSE,
+            .queryFlags = 0,
+            .pipelineStatistics = 0
+        };
+
+        VkCommandBufferBeginInfo commandBufferBeginInfo = {
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+            .pNext = nullptr,
+            .flags = 0,
+            .pInheritanceInfo = nullptr //&commandBufferInheritanceInfo
+        };
+
+        vkBeginCommandBuffer(m_CommandBuffers[i], &commandBufferBeginInfo);
+        {
+            VkClearValue clearValue = {
+                .color.float32[0] = 1.0f,
+                .color.float32[1] = 0.0f,
+                .color.float32[2] = 0.0f,
+                .color.float32[3] = 1.0f
+            };
+
+            VkRenderPassBeginInfo renderPassBeginInfo = {
+                .sType = VkStructureType::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                .pNext = nullptr,
+                .renderPass = m_RenderPass,
+                .framebuffer = m_FrameBuffers[i],
+                .renderArea = VkRect2D{
+                    VkOffset2D{ 0, 0 },
+                    VkExtent2D{
+                        m_SwapchainBuffers[i].width,
+                        m_SwapchainBuffers[i].height } },
+                .clearValueCount = 1,
+                .pClearValues = &clearValue
+            };
+
+            vkCmdBeginRenderPass(m_CommandBuffers[i],
+                &renderPassBeginInfo,
+                VkSubpassContents::VK_SUBPASS_CONTENTS_INLINE);
+            //vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_Pip);
+            vkCmdEndRenderPass(m_CommandBuffers[i]);
+
+            VkImageMemoryBarrier imageMemoryBarrier = {
+                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                .pNext = nullptr,
+                .srcAccessMask = 0,
+                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                .oldLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                .image = m_SwapchainBuffers[i].image,
+                .subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            };
+
+            vkCmdPipelineBarrier(m_CommandBuffers[i],
+                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &imageMemoryBarrier);
+        }
+        vkEndCommandBuffer(m_CommandBuffers[i]);
+    }
+
+    VkFenceCreateInfo fenceCreateInfo = {
+        .sType = VkStructureType::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+        .pNext = nullptr,
+        .flags = 0
+    };
+
+    result = vkCreateFence(m_LogicalDevice, &fenceCreateInfo, nullptr, &m_Fence);
+    assert(result == VK_SUCCESS);
+
+    m_IsInitialized = (result == VK_SUCCESS);
+    return m_IsInitialized;
+}
+
+bool Scene::IsInitialized() const
+{
+    return m_IsInitialized;
+}
+
+std::tuple<VkResult, VkInstance> Scene::CreateInstance(const std::string& appName, const std::string& engineName)
 {
     const VkApplicationInfo app = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pNext = nullptr,
-        .pApplicationName = "vkSandbox",
+        .pApplicationName = appName.c_str(),
         .applicationVersion = 0,
-        .pEngineName = "vkSandbox",
+        .pEngineName = engineName.c_str(),
         .engineVersion = 0,
         .apiVersion = VK_API_VERSION_1_0,
     };
@@ -40,28 +256,68 @@ VkResult Scene::Initialize(void* view)
         .ppEnabledExtensionNames = 0,
     };
 
-    // Instance and GPUs
-    VkResult result = vkCreateInstance(&inst_info, nullptr, &m_Instance);
-    assert(result == VK_SUCCESS);
+    VkInstance instance;
+    VkResult result = vkCreateInstance(&inst_info, nullptr, &instance);
+    std::tuple<VkResult, VkInstance> instanceData(result, instance);
+    return instanceData;
+}
 
+std::tuple<VkResult, std::vector<VkPhysicalDevice> > Scene::GetPhysicalDevices(const VkInstance& instance)
+{
     uint32_t physicalDeviceCount = 0;
-    result = vkEnumeratePhysicalDevices(m_Instance, &physicalDeviceCount, nullptr);
-    assert(result == VK_SUCCESS);
-    m_PhysicalDevices.resize(physicalDeviceCount);
-    vkEnumeratePhysicalDevices(m_Instance, &physicalDeviceCount, m_PhysicalDevices.data());
+    VkResult result = vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
 
-    vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevices[0], &m_MemoryProperties);
-    vkGetPhysicalDeviceProperties(m_PhysicalDevices[0], &m_PhysicalDeviceProperties);
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    result = vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, &physicalDevices[0]);
 
-    // Queue properties
+    std::tuple<VkResult, std::vector<VkPhysicalDevice> > physycalDeviceData(result, physicalDevices);
+    return physycalDeviceData;
+}
+
+std::vector<VkQueueFamilyProperties> Scene::GetPhysicalDeviceQueueProps(const VkInstance& instance,
+    const VkPhysicalDevice physicalDevice)
+{
     uint32_t queueCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(m_PhysicalDevices[0], &queueCount, nullptr);
-    assert(queueCount > 0);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueCount, nullptr);
 
-    m_QueueProperties.resize(queueCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(m_PhysicalDevices[0], &queueCount, m_QueueProperties.data());
+    std::vector<VkQueueFamilyProperties> queueProperties(queueCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueCount, &queueProperties[0]);
 
-    // Logical device
+    return queueProperties;
+}
+
+std::tuple<VkResult, VkSurfaceKHR, std::vector<VkSurfaceFormatKHR> > Scene::CreateSurface(const VkInstance& instance,
+    const VkPhysicalDevice& physicalDevice,
+    void* view)
+{
+    VkResult result;
+    VkSurfaceKHR surface;
+#if defined(VK_USE_PLATFORM_IOS_MVK)
+    VkIOSSurfaceCreateInfoMVK createInfo = {
+        .sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK,
+        .pNext = nullptr,
+        .flags = 0,
+        .pView = view
+    };
+    result = vkCreateIOSSurfaceMVK(instance, &createInfo, nullptr, &surface);
+    assert(result == VK_SUCCESS);
+#endif
+
+    uint32_t formatCount;
+    result = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr);
+
+    std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
+    result = vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, &surfaceFormats[0]);
+
+    if (formatCount == 1 && surfaceFormats[0].format == VK_FORMAT_UNDEFINED) {
+        surfaceFormats[0].format = VK_FORMAT_B8G8R8A8_UNORM;
+    }
+
+    return std::tuple<VkResult, VkSurfaceKHR, std::vector<VkSurfaceFormatKHR> >(result, surface, surfaceFormats);
+}
+
+std::tuple<VkResult, VkDevice> Scene::CreateLogicalDevice(const VkPhysicalDevice& physicalDevice /* debug layer */)
+{
     float queuePriorities[1] = { 0.0 };
     VkDeviceQueueCreateInfo queueInfo = {
         .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
@@ -85,151 +341,14 @@ VkResult Scene::Initialize(void* view)
         .pEnabledFeatures = nullptr
     };
 
-    result = vkCreateDevice(m_PhysicalDevices[0], &deviceInfo, nullptr, &m_LogicalDevice);
-    assert(result == VK_SUCCESS);
+    VkDevice logicalDevice;
+    VkResult result = vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &logicalDevice);
 
-#if defined(VK_USE_PLATFORM_IOS_MVK)
-    VkIOSSurfaceCreateInfoMVK createInfo = {
-        .sType = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK,
-        .pNext = nullptr,
-        .flags = 0,
-        .pView = view
-    };
-    result = vkCreateIOSSurfaceMVK(m_Instance, &createInfo, nullptr, &m_Surface);
-    assert(result == VK_SUCCESS);
-#endif
-
-    uint32_t formatCount;
-    result = vkGetPhysicalDeviceSurfaceFormatsKHR(m_PhysicalDevices[0], m_Surface, &formatCount, nullptr);
-    assert(result == VK_SUCCESS);
-    m_SurfaceFormats.resize(formatCount);
-    result = vkGetPhysicalDeviceSurfaceFormatsKHR(m_PhysicalDevices[0], m_Surface, &formatCount, &m_SurfaceFormats[0]);
-    assert(result == VK_SUCCESS);
-
-    assert(formatCount >= 1);
-    if (formatCount == 1 && m_SurfaceFormats[0].format == VK_FORMAT_UNDEFINED) {
-        m_SurfaceFormats[0].format = VK_FORMAT_B8G8R8A8_UNORM;
-    }
-
-    //
-    VkSurfaceFormatKHR currentSurfaceFormat = m_SurfaceFormats[0];
-
-    std::tuple<VkSwapchainKHR, std::vector<SwapchainBuffers> > buffers = CreateBuffers(m_PhysicalDevices[0],
-        m_LogicalDevice, m_Surface, currentSurfaceFormat);
-    m_Swapchain = std::get<0>(buffers);
-    m_SwapchainBuffers = std::get<1>(buffers);
-
-    //
-    m_RenderPass = CreateRenderPass(m_LogicalDevice, currentSurfaceFormat);
-    m_FrameBuffers = CreateFrameBuffers(m_LogicalDevice, m_SwapchainBuffers, m_RenderPass);
-    
-    //
-    std::vector<VkBool32> supportsPresent(m_QueueProperties.size());
-    for (int i = 0; i < m_QueueProperties.size(); i++) {
-        vkGetPhysicalDeviceSurfaceSupportKHR(m_PhysicalDevices[0], i, m_Surface, &supportsPresent[i]);
-    }
-    
-    std::tuple<VkQueueFamilyProperties, uint32_t> graphicQueueProps = FindQueueProperties(VK_QUEUE_GRAPHICS_BIT,
-                                                                                          supportsPresent);
-    vkGetDeviceQueue(m_LogicalDevice, std::get<1>(graphicQueueProps), 0, &m_Queue);
-    std::tuple<VkCommandPool, std::vector<VkCommandBuffer> > cmdPool = CreateCommandPool(m_LogicalDevice,
-                                                                           std::get<1>(graphicQueueProps),
-                                                                           m_SwapchainBuffers.size());
-    m_CommandPool = std::get<0>(cmdPool);
-    m_CommandBuffers = std::get<1>(cmdPool);
-    
-    //
-    for (uint32_t i = 0; i < m_SwapchainBuffers.size(); ++i) {
-        
-        VkCommandBufferInheritanceInfo commandBufferInheritanceInfo = {
-            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
-            .pNext = nullptr,
-            .renderPass = m_RenderPass,
-            .subpass = 0,
-            .framebuffer = m_FrameBuffers[i],
-            .occlusionQueryEnable = VK_FALSE,
-            .queryFlags = 0,
-            .pipelineStatistics = 0
-        };
-        
-        VkCommandBufferBeginInfo commandBufferBeginInfo = {
-            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-            .pNext = nullptr,
-            .flags = 0,
-            .pInheritanceInfo = nullptr//&commandBufferInheritanceInfo
-        };
-        
-        vkBeginCommandBuffer(m_CommandBuffers[i], &commandBufferBeginInfo);
-        {
-            VkClearValue clearValue = {
-                .color.float32[0] = 1.0f,
-                .color.float32[1] = 0.0f,
-                .color.float32[2] = 0.0f,
-                .color.float32[3] = 1.0f
-            };
-            
-            VkRenderPassBeginInfo renderPassBeginInfo = {
-                .sType = VkStructureType::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                .pNext = nullptr,
-                .renderPass = m_RenderPass,
-                .framebuffer = m_FrameBuffers[i],
-                .renderArea = VkRect2D{
-                    VkOffset2D{0, 0},
-                    VkExtent2D{
-                        m_SwapchainBuffers[i].width,
-                        m_SwapchainBuffers[i].height
-                    }
-                },
-                .clearValueCount = 1,
-                .pClearValues = &clearValue
-            };
-            
-            vkCmdBeginRenderPass(m_CommandBuffers[i],
-                                 &renderPassBeginInfo,
-                                 VkSubpassContents::VK_SUBPASS_CONTENTS_INLINE);
-            //vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_Pip);
-            vkCmdEndRenderPass(m_CommandBuffers[i]);
-            
-            VkImageMemoryBarrier imageMemoryBarrier = {
-                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                .pNext = nullptr,
-                .srcAccessMask = 0,
-                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .oldLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                .image = m_SwapchainBuffers[i].image,
-                .subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1}
-            };
-            
-            vkCmdPipelineBarrier(m_CommandBuffers[i],
-                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                                 0,
-                                 0, nullptr,
-                                 0, nullptr,
-                                 1, &imageMemoryBarrier);
-        }
-        vkEndCommandBuffer(m_CommandBuffers[i]);
-    }
-    
-    
-    VkFenceCreateInfo fenceCreateInfo = {
-        .sType = VkStructureType::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-        .pNext = nullptr,
-        .flags = 0
-    };
-    
-    result = vkCreateFence(m_LogicalDevice, &fenceCreateInfo, nullptr, &m_Fence);
-    assert(result == VK_SUCCESS);
-    
-    m_IsInitialized = (result == VK_SUCCESS);
-    
-    return result;
+    std::tuple<VkResult, VkDevice> logicalDeviceData(result, logicalDevice);
+    return logicalDeviceData;
 }
 
-std::tuple<VkCommandPool, std::vector<VkCommandBuffer> > Scene::CreateCommandPool(const VkDevice& logicalDevice,
+std::tuple<VkResult, VkCommandPool, std::vector<VkCommandBuffer> > Scene::CreateCommandPool(const VkDevice& logicalDevice,
     uint32_t graphicQueueIndex, size_t count)
 {
     const VkCommandPoolCreateInfo cmdPoolInfo = {
@@ -241,11 +360,9 @@ std::tuple<VkCommandPool, std::vector<VkCommandBuffer> > Scene::CreateCommandPoo
 
     VkCommandPool commandPool;
     VkResult result = vkCreateCommandPool(logicalDevice, &cmdPoolInfo, nullptr, &commandPool);
-    assert(result == VK_SUCCESS);
-    
+
     result = vkResetCommandPool(logicalDevice, commandPool,
-                                VkCommandPoolResetFlagBits::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
-    assert(result == VK_SUCCESS);
+        VkCommandPoolResetFlagBits::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
 
     const VkCommandBufferAllocateInfo cmd = {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
@@ -257,28 +374,24 @@ std::tuple<VkCommandPool, std::vector<VkCommandBuffer> > Scene::CreateCommandPoo
 
     std::vector<VkCommandBuffer> commandBuffers(count);
     result = vkAllocateCommandBuffers(logicalDevice, &cmd, &commandBuffers[0]);
-    assert(result == VK_SUCCESS);
 
-    std::tuple<VkCommandPool, std::vector<VkCommandBuffer> > cmdResult(commandPool, commandBuffers);
-    return std::move(cmdResult);
+    std::tuple<VkResult, VkCommandPool, std::vector<VkCommandBuffer> > cmdResult(result, commandPool, commandBuffers);
+    return cmdResult;
 }
 
-std::tuple<VkSwapchainKHR, std::vector<SwapchainBuffers> > Scene::CreateBuffers(const VkPhysicalDevice& physicalDevice,
+std::tuple<VkResult, VkSwapchainKHR, std::vector<SwapchainBuffers> > Scene::CreateBuffers(const VkPhysicalDevice& physicalDevice,
     const VkDevice& logicalDevice,
     const VkSurfaceKHR& surface,
     const VkSurfaceFormatKHR& surfaceFormat)
 {
     VkSurfaceCapabilitiesKHR surfCapabilities;
     VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &surfCapabilities);
-    assert(result == VK_SUCCESS);
 
     uint32_t presentModeCount;
     result = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
-    assert(result == VK_SUCCESS);
+
     std::vector<VkPresentModeKHR> presentModes(presentModeCount);
-    assert(presentModeCount > 0);
     result = vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, &presentModes[0]);
-    assert(result == VK_SUCCESS);
 
     VkExtent2D swapchainExtent;
     // width and height are either both -1, or both not -1.
@@ -346,16 +459,13 @@ std::tuple<VkSwapchainKHR, std::vector<SwapchainBuffers> > Scene::CreateBuffers(
 
     VkSwapchainKHR swapchain;
     result = vkCreateSwapchainKHR(logicalDevice, &swapchainInfo, nullptr, &swapchain);
-    assert(result == VK_SUCCESS);
 
     uint32_t swapchainImageCount;
     result = vkGetSwapchainImagesKHR(logicalDevice, swapchain, &swapchainImageCount, nullptr);
-    assert(result == VK_SUCCESS);
 
     std::vector<VkImage> swapchainImages(swapchainImageCount);
     assert(swapchainImageCount > 0);
     result = vkGetSwapchainImagesKHR(logicalDevice, swapchain, &swapchainImageCount, &swapchainImages[0]);
-    assert(result == VK_SUCCESS);
 
     std::vector<SwapchainBuffers> buffers(swapchainImageCount);
     for (uint32_t i = 0; i < swapchainImageCount; i++) {
@@ -380,14 +490,14 @@ std::tuple<VkSwapchainKHR, std::vector<SwapchainBuffers> > Scene::CreateBuffers(
         color_image_view.image = swapchainImages[i];
 
         result = vkCreateImageView(logicalDevice, &color_image_view, nullptr, &buffers[i].view);
-        assert(result == VK_SUCCESS);
     }
 
-    std::tuple<VkSwapchainKHR, std::vector<SwapchainBuffers> > resultBuffers(swapchain, buffers);
-    return std::move(resultBuffers);
+    std::tuple<VkResult, VkSwapchainKHR, std::vector<SwapchainBuffers> > resultBuffersData(result, swapchain, buffers);
+    return resultBuffersData;
 }
 
-VkRenderPass Scene::CreateRenderPass(const VkDevice& logicalDevice, const VkSurfaceFormatKHR& surfaceFormat)
+std::tuple<VkResult, VkRenderPass> Scene::CreateRenderPass(const VkDevice& logicalDevice,
+    const VkSurfaceFormatKHR& surfaceFormat)
 {
     const VkAttachmentDescription attachments[1] = {
             [0] = {
@@ -404,10 +514,6 @@ VkRenderPass Scene::CreateRenderPass(const VkDevice& logicalDevice, const VkSurf
     };
     const VkAttachmentReference colorReference = {
         .attachment = 0, .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-    };
-    const VkAttachmentReference depthReference = {
-        .attachment = 1,
-        .layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
     };
     const VkSubpassDescription subpass = {
         .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -434,15 +540,16 @@ VkRenderPass Scene::CreateRenderPass(const VkDevice& logicalDevice, const VkSurf
 
     VkRenderPass renderPass;
     VkResult result = vkCreateRenderPass(logicalDevice, &renderpassInfo, NULL, &renderPass);
-    assert(result == VK_SUCCESS);
 
-    return std::move(renderPass);
+    std::tuple<VkResult, VkRenderPass> renderPassData(result, renderPass);
+    return renderPassData;
 }
 
-std::vector<VkFramebuffer> Scene::CreateFrameBuffers(const VkDevice& logicalDevice,
+std::tuple<VkResult, std::vector<VkFramebuffer> > Scene::CreateFrameBuffers(const VkDevice& logicalDevice,
     const std::vector<SwapchainBuffers>& swapchainBuffers,
     const VkRenderPass& renderPass)
 {
+    VkResult result;
     std::vector<VkFramebuffer> framebuffers(swapchainBuffers.size());
     for (uint32_t i = 0; i < swapchainBuffers.size(); ++i) {
         const SwapchainBuffers& swapchainBuffer = swapchainBuffers[i];
@@ -458,17 +565,22 @@ std::vector<VkFramebuffer> Scene::CreateFrameBuffers(const VkDevice& logicalDevi
             .layers = 1,
         };
 
-        VkResult result = vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &framebuffers[i]);
-        assert(result == VK_SUCCESS);
+        result = vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &framebuffers[i]);
+        if (result != VK_SUCCESS) {
+            break;
+        }
     }
 
-    return std::move(framebuffers);
+    std::tuple<VkResult, std::vector<VkFramebuffer> > frameBufferData(result, framebuffers);
+    return frameBufferData;
 }
 
-std::tuple<VkQueueFamilyProperties, uint32_t> Scene::FindQueueProperties(VkQueueFlags flag,
+std::tuple<bool, VkQueueFamilyProperties, uint32_t> Scene::FindQueueProperties(VkQueueFlags flag,
     const std::vector<VkBool32>& supportsPresent)
 {
-    std::tuple<VkQueueFamilyProperties, uint32_t> queueProps;
+    std::tuple<bool, VkQueueFamilyProperties, uint32_t> queueProps;
+    std::get<0>(queueProps) = false;
+
     int index = 0;
     std::all_of(m_QueueProperties.begin(), m_QueueProperties.end(), [&](VkQueueFamilyProperties props) {
         if (index < supportsPresent.size() && !supportsPresent[index]) {
@@ -477,15 +589,16 @@ std::tuple<VkQueueFamilyProperties, uint32_t> Scene::FindQueueProperties(VkQueue
         }
 
         if (props.queueFlags & flag) {
-            std::get<0>(queueProps) = props;
-            std::get<1>(queueProps) = index;
+            std::get<0>(queueProps) = true;
+            std::get<1>(queueProps) = props;
+            std::get<2>(queueProps) = index;
             return true;
         }
         ++index;
 
         return false;
     });
-    return std::move(queueProps);
+    return queueProps;
 }
 
 void Scene::Update()
@@ -496,14 +609,14 @@ void Scene::Update()
         result = vkAcquireNextImageKHR(m_LogicalDevice, m_Swapchain, UINT64_MAX, VK_NULL_HANDLE, m_Fence, &swapchainImage);
         assert(result == VK_SUCCESS);
     }
-    
+
     result = vkWaitForFences(m_LogicalDevice, 1, &m_Fence, VK_TRUE, UINT64_MAX);
     assert(result == VK_SUCCESS);
     result = vkResetFences(m_LogicalDevice, 1, &m_Fence);
     assert(result == VK_SUCCESS);
-    
+
     const VkCommandBuffer& commandBuffer = m_CommandBuffers[swapchainImage];
-    
+
     VkPipelineStageFlags waitMask = VkPipelineStageFlagBits::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
     VkSubmitInfo submitInfo = {
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -516,13 +629,13 @@ void Scene::Update()
         .signalSemaphoreCount = 0,
         .pSignalSemaphores = nullptr
     };
-    
+
     result = vkQueueSubmit(m_Queue, 1, &submitInfo, VK_NULL_HANDLE);
     assert(result == VK_SUCCESS);
-    
+
     result = vkQueueWaitIdle(m_Queue);
     assert(result == VK_SUCCESS);
-    
+
     VkPresentInfoKHR presentInfoKHR = {
         .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
         .pNext = nullptr,
@@ -534,7 +647,7 @@ void Scene::Update()
         .pResults = &result
     };
     assert(result == VK_SUCCESS);
-    
+
     result = vkQueuePresentKHR(m_Queue, &presentInfoKHR);
     assert(result == VK_SUCCESS);
 }
