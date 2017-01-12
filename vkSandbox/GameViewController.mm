@@ -15,6 +15,15 @@
     // view
     MTKView *_view;
     CADisplayLink* _displayLink;
+    Scene *_scene;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -28,8 +37,8 @@
     _view = (MTKView *)self.view;
     //_view.delegate = self;
     
-    Scene *scene = new Scene();
-    scene->Initialize();
+    _scene = new Scene();
+    _scene->Initialize((__bridge void *)_view);
     
     // Setup the render target, choose values based on your app
     _view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
@@ -41,7 +50,9 @@
 }
 
 -(void) renderLoop {
-    
+    if (_scene && _scene->m_IsInitialized) {
+        _scene->Update();
+    }
 }
 
 
