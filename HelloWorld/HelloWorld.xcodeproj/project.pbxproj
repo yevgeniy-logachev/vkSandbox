@@ -15,13 +15,14 @@
 		6E82D42D1E27E03A008DC962 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E82D42B1E27E03A008DC962 /* Main.storyboard */; };
 		6E82D42F1E27E03A008DC962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E82D42E1E27E03A008DC962 /* Assets.xcassets */; };
 		6E82D4321E27E03A008DC962 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E82D4301E27E03A008DC962 /* LaunchScreen.storyboard */; };
-		6E82D43C1E27E08A008DC962 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E82D43A1E27E08A008DC962 /* Scene.cpp */; };
 		6E82D4491E27E0E9008DC962 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E82D4481E27E0E9008DC962 /* libc++.tbd */; };
-		6E82D44E1E27E448008DC962 /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E82D4431E27E09A008DC962 /* MoltenVK.framework */; };
+		CC42EC421F8D17150069785D /* vkInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC401F8D17150069785D /* vkInstance.cpp */; };
+		CC42EC451F8D1A5A0069785D /* TestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC431F8D1A5A0069785D /* TestScene.cpp */; };
+		CC42EC481F8D1CAF0069785D /* vkInstanceImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC461F8D1CAF0069785D /* vkInstanceImpl.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6E82D4151E27E03A008DC962 /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E82D4151E27E03A008DC962 /* HelloWorldiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorldiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E82D4181E27E03A008DC962 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		6E82D41A1E27E03A008DC962 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		6E82D41C1E27E03A008DC962 /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
@@ -34,13 +35,18 @@
 		6E82D42E1E27E03A008DC962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E82D4311E27E03A008DC962 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E82D4331E27E03A008DC962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6E82D43A1E27E08A008DC962 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		6E82D43B1E27E08A008DC962 /* Scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
 		6E82D4401E27E09A008DC962 /* vk_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_platform.h; sourceTree = "<group>"; };
 		6E82D4411E27E09A008DC962 /* vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan.h; sourceTree = "<group>"; };
 		6E82D4431E27E09A008DC962 /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MoltenVK.framework; sourceTree = "<group>"; };
 		6E82D4451E27E09A008DC962 /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MoltenVK.framework; sourceTree = "<group>"; };
 		6E82D4481E27E0E9008DC962 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		CC42EC3F1F8D10A80069785D /* HelloWorldiOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "HelloWorldiOS copy-Info.plist"; path = "/Users/yev/projects/vkGL/HelloWorld/HelloWorldiOS copy-Info.plist"; sourceTree = "<absolute>"; };
+		CC42EC401F8D17150069785D /* vkInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vkInstance.cpp; sourceTree = "<group>"; };
+		CC42EC431F8D1A5A0069785D /* TestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScene.cpp; sourceTree = "<group>"; };
+		CC42EC441F8D1A5A0069785D /* TestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TestScene.hpp; sourceTree = "<group>"; };
+		CC42EC461F8D1CAF0069785D /* vkInstanceImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vkInstanceImpl.cpp; sourceTree = "<group>"; };
+		CC42EC471F8D1CAF0069785D /* vkInstanceImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vkInstanceImpl.hpp; sourceTree = "<group>"; };
+		CC42EC4A1F8D1E490069785D /* vkGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vkGlobal.h; path = src/private/vkGlobal.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +54,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E82D44E1E27E448008DC962 /* MoltenVK.framework in Frameworks */,
 				6E82D4491E27E0E9008DC962 /* libc++.tbd in Frameworks */,
 				6E82D4191E27E03A008DC962 /* Metal.framework in Frameworks */,
 				6E82D41B1E27E03A008DC962 /* MetalKit.framework in Frameworks */,
@@ -66,13 +71,14 @@
 				6E82D41E1E27E03A008DC962 /* HelloWorld */,
 				6E82D4171E27E03A008DC962 /* Frameworks */,
 				6E82D4161E27E03A008DC962 /* Products */,
+				CC42EC3F1F8D10A80069785D /* HelloWorldiOS copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
 		6E82D4161E27E03A008DC962 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6E82D4151E27E03A008DC962 /* HelloWorld.app */,
+				6E82D4151E27E03A008DC962 /* HelloWorldiOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,8 +121,10 @@
 		6E82D4391E27E08A008DC962 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				6E82D43A1E27E08A008DC962 /* Scene.cpp */,
-				6E82D43B1E27E08A008DC962 /* Scene.hpp */,
+				CC42EC4D1F8D1E520069785D /* private */,
+				CC42EC491F8D1CB90069785D /* vkInstance */,
+				CC42EC431F8D1A5A0069785D /* TestScene.cpp */,
+				CC42EC441F8D1A5A0069785D /* TestScene.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -164,12 +172,30 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
+		CC42EC491F8D1CB90069785D /* vkInstance */ = {
+			isa = PBXGroup;
+			children = (
+				CC42EC401F8D17150069785D /* vkInstance.cpp */,
+				CC42EC461F8D1CAF0069785D /* vkInstanceImpl.cpp */,
+				CC42EC471F8D1CAF0069785D /* vkInstanceImpl.hpp */,
+			);
+			path = vkInstance;
+			sourceTree = "<group>";
+		};
+		CC42EC4D1F8D1E520069785D /* private */ = {
+			isa = PBXGroup;
+			children = (
+				CC42EC4A1F8D1E490069785D /* vkGlobal.h */,
+			);
+			path = private;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6E82D4141E27E03A008DC962 /* HelloWorld */ = {
+		6E82D4141E27E03A008DC962 /* HelloWorldiOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6E82D4361E27E03A008DC962 /* Build configuration list for PBXNativeTarget "HelloWorld" */;
+			buildConfigurationList = 6E82D4361E27E03A008DC962 /* Build configuration list for PBXNativeTarget "HelloWorldiOS" */;
 			buildPhases = (
 				6E82D4111E27E03A008DC962 /* Sources */,
 				6E82D4121E27E03A008DC962 /* Frameworks */,
@@ -179,9 +205,9 @@
 			);
 			dependencies = (
 			);
-			name = HelloWorld;
+			name = HelloWorldiOS;
 			productName = HelloWorld;
-			productReference = 6E82D4151E27E03A008DC962 /* HelloWorld.app */;
+			productReference = 6E82D4151E27E03A008DC962 /* HelloWorldiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -213,7 +239,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6E82D4141E27E03A008DC962 /* HelloWorld */,
+				6E82D4141E27E03A008DC962 /* HelloWorldiOS */,
 			);
 		};
 /* End PBXProject section */
@@ -236,8 +262,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E82D43C1E27E08A008DC962 /* Scene.cpp in Sources */,
 				6E82D4241E27E03A008DC962 /* AppDelegate.m in Sources */,
+				CC42EC421F8D17150069785D /* vkInstance.cpp in Sources */,
+				CC42EC451F8D1A5A0069785D /* TestScene.cpp in Sources */,
+				CC42EC481F8D1CAF0069785D /* vkInstanceImpl.cpp in Sources */,
 				6E82D4271E27E03A008DC962 /* GameViewController.mm in Sources */,
 				6E82D4211E27E03A008DC962 /* main.m in Sources */,
 			);
@@ -368,6 +396,7 @@
 					"DEBUG=1",
 					"VK_USE_PLATFORM_IOS_MVK=1",
 					"$(inherited)",
+					"LOGS_ENABLED=1",
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/external/include";
 				INFOPLIST_FILE = HelloWorld/Info.plist;
@@ -409,13 +438,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6E82D4361E27E03A008DC962 /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
+		6E82D4361E27E03A008DC962 /* Build configuration list for PBXNativeTarget "HelloWorldiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6E82D4371E27E03A008DC962 /* Debug */,
 				6E82D4381E27E03A008DC962 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

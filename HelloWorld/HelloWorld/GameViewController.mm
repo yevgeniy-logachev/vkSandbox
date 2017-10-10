@@ -7,13 +7,12 @@
 //
 
 #import "GameViewController.h"
-#include "scene.hpp"
+#import "TestScene.hpp"
 
 @implementation GameViewController {
     // view
     MTKView* _view;
     CADisplayLink* _displayLink;
-    Scene* _scene;
 }
 
 - (instancetype)init
@@ -33,13 +32,10 @@
 - (void)_setupView
 {
     _view = (MTKView*)self.view;
-
-    _scene = new Scene();
-    _scene->Initialize((__bridge void*)_view);
-    assert(_scene->IsInitialized());
-
     // Setup the render target, choose values based on your app
     _view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
+    
+    Scene *scene = new Scene();
 
     uint32_t fps = 60;
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(renderLoop)];
@@ -49,7 +45,7 @@
 
 - (void)renderLoop
 {
-    _scene->Update();
+    
 }
 
 #pragma mark MTKViewDelegate
