@@ -19,6 +19,8 @@
 		CC42EC421F8D17150069785D /* vkInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC401F8D17150069785D /* vkInstance.cpp */; };
 		CC42EC451F8D1A5A0069785D /* TestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC431F8D1A5A0069785D /* TestScene.cpp */; };
 		CC42EC481F8D1CAF0069785D /* vkInstanceImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC461F8D1CAF0069785D /* vkInstanceImpl.cpp */; };
+		CC42EC541F99F93B0069785D /* vkPhysicalDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC531F99F93A0069785D /* vkPhysicalDevice.cpp */; };
+		CC42EC571F99FD520069785D /* vkPhysicalDeviceImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC42EC551F99FD520069785D /* vkPhysicalDeviceImpl.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,9 @@
 		CC42EC461F8D1CAF0069785D /* vkInstanceImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vkInstanceImpl.cpp; sourceTree = "<group>"; };
 		CC42EC471F8D1CAF0069785D /* vkInstanceImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vkInstanceImpl.hpp; sourceTree = "<group>"; };
 		CC42EC4A1F8D1E490069785D /* vkGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vkGlobal.h; path = src/private/vkGlobal.h; sourceTree = SOURCE_ROOT; };
+		CC42EC531F99F93A0069785D /* vkPhysicalDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vkPhysicalDevice.cpp; sourceTree = "<group>"; };
+		CC42EC551F99FD520069785D /* vkPhysicalDeviceImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vkPhysicalDeviceImpl.cpp; sourceTree = "<group>"; };
+		CC42EC561F99FD520069785D /* vkPhysicalDeviceImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vkPhysicalDeviceImpl.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +128,7 @@
 			children = (
 				CC42EC4D1F8D1E520069785D /* private */,
 				CC42EC491F8D1CB90069785D /* vkInstance */,
+				CC42EC521F99F93A0069785D /* vkPhysicalDevice */,
 				CC42EC431F8D1A5A0069785D /* TestScene.cpp */,
 				CC42EC441F8D1A5A0069785D /* TestScene.hpp */,
 			);
@@ -188,6 +194,16 @@
 				CC42EC4A1F8D1E490069785D /* vkGlobal.h */,
 			);
 			path = private;
+			sourceTree = "<group>";
+		};
+		CC42EC521F99F93A0069785D /* vkPhysicalDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CC42EC531F99F93A0069785D /* vkPhysicalDevice.cpp */,
+				CC42EC551F99FD520069785D /* vkPhysicalDeviceImpl.cpp */,
+				CC42EC561F99FD520069785D /* vkPhysicalDeviceImpl.hpp */,
+			);
+			path = vkPhysicalDevice;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,11 +279,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E82D4241E27E03A008DC962 /* AppDelegate.m in Sources */,
+				CC42EC571F99FD520069785D /* vkPhysicalDeviceImpl.cpp in Sources */,
 				CC42EC421F8D17150069785D /* vkInstance.cpp in Sources */,
 				CC42EC451F8D1A5A0069785D /* TestScene.cpp in Sources */,
 				CC42EC481F8D1CAF0069785D /* vkInstanceImpl.cpp in Sources */,
 				6E82D4271E27E03A008DC962 /* GameViewController.mm in Sources */,
 				6E82D4211E27E03A008DC962 /* main.m in Sources */,
+				CC42EC541F99F93B0069785D /* vkPhysicalDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

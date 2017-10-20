@@ -6,14 +6,14 @@
 //  Copyright © 2017 Yevgeniy Logachev. All rights reserved.
 //
 
-#include "vulkan.h"
+#include "vkGlobal.h"
 #include "vkInstanceImpl.hpp"
 
 using namespace vkgl;
 
-VkResult vkCreateInstance(const VkInstanceCreateInfo* pCreateInfo,
-                          const VkAllocationCallbacks* pAllocator,
-                          VkInstance* pInstance)
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateInstance(const VkInstanceCreateInfo* pCreateInfo,
+                                                const VkAllocationCallbacks* pAllocator,
+                                                VkInstance* pInstance)
 {
     if (!pCreateInfo ||
         pCreateInfo->sType != VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO ||

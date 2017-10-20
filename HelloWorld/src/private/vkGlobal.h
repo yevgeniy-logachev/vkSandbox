@@ -33,6 +33,8 @@
 #include <assert.h>
 #include <fstream>
 
+#include "vulkan.h"
+
 // LINUX
 #if defined(OS_LINUX)
 #    include <EGL/egl.h>
